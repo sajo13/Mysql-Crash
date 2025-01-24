@@ -348,3 +348,22 @@ SELECT s.name AS student_name, c.course_name
 FROM students s
          JOIN student_courses sc ON s.student_id = sc.student_id
          JOIN courses c ON sc.course_id = c.course_id;
+
+# Unique key constraints
+
+CREATE TABLE users (
+                       user_id INT AUTO_INCREMENT PRIMARY KEY,
+                       username VARCHAR(50) NOT NULL,
+                       email VARCHAR(100) NOT NULL,
+                       UNIQUE (email)  -- This ensures that email addresses are unique
+);
+
+
+-- Valid insertion
+INSERT INTO users (username, email) VALUES ('john_doe', 'john.doe@example.com');
+
+-- Attempting to insert a duplicate email will result in an error
+INSERT INTO users (username, email) VALUES ('jane_doe', 'john.doe@example.com');
+
+
+SELECT * FROM users;
