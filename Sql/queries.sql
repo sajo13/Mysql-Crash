@@ -32,13 +32,13 @@ INSERT INTO departments (department_name) VALUES ('Marketing');
 
 -- Insert employees with foreign key references to departments
 INSERT INTO employees (first_name, last_name, department_id)
-VALUES ('Sajo', 'Sunny', 1); -- John is in HR (department_id 1)
+VALUES ('Sajo', 'Sunny', null);
 
 INSERT INTO employees (first_name, last_name, department_id)
-VALUES ('James', 'Smith', 2); -- Jane is in Engineering (department_id 2)
+VALUES ('James', 'Smith', 2);
 
 INSERT INTO employees (first_name, last_name, department_id)
-VALUES ('Arun', 'Thomas', 1); -- Alex is in HR (department_id 1)
+VALUES ('Arun', 'Thomas', 1);
 
 
 --Add foreign key after table creation
@@ -73,3 +73,9 @@ SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS full_name, dep.department_n
 ON emp.department_id = dep.department_id;
 
 
+-- LEFT JOIN (LEFT OUTER JOIN)
+
+SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS full_name, dep.department_name
+        FROM employees AS emp
+         LEFT JOIN departments AS dep
+ON emp.department_id = dep.department_id;
