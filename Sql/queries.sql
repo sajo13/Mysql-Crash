@@ -450,3 +450,26 @@ SELECT email FROM users;
 
 -- Alternatively, you can use GROUP BY if you're aggregating results
 SELECT email FROM users GROUP BY email;
+
+-- 1. When you define a foreign key constraint in MySQL, the database automatically creates an index
+--    on the foreign key column in the child table if there is no existing index on it.
+-- 2. This index is used to enforce referential integrity and speed up queries that involve joins or
+--    lookups on the foreign key column.
+-- 3. You can use `SHOW INDEX` to verify the index on the foreign key column.
+
+CREATE TABLE customers (
+                           customer_id INT AUTO_INCREMENT PRIMARY KEY,   -- Primary Key for `customers`
+                           first_name VARCHAR(100),
+                           last_name VARCHAR(100),
+                           email VARCHAR(100)
+);
+
+CREATE TABLE orders (
+                        order_id INT AUTO_INCREMENT PRIMARY KEY,   -- Primary Key for `orders`
+                        order_date DATE,
+                        customer_id INT,                           -- Foreign Key referencing `customers`
+                        amount DECIMAL(10, 2),
+                        FOREIGN KEY (customer_id) REFERENCES customers(customer_id)   -- Foreign Key Constraint
+);
+
+SHOW INDEX FROM orders;
