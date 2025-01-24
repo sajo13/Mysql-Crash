@@ -209,3 +209,42 @@ FROM
     orders o ON c.customer_id = o.customer_id
         JOIN
     products p ON o.order_id = p.order_id;
+
+
+-- Filtering Aggregated Data
+
+-- Insert sample data into customers
+INSERT INTO customers (customer_id, customer_name, city) VALUES
+                                                             (1, 'Alice Johnson', 'New York'),
+                                                             (2, 'Bob Smith', 'Los Angeles'),
+                                                             (3, 'Charlie Brown', 'Chicago'),
+                                                             (4, 'David White', 'Houston'),
+                                                             (5, 'Eva Green', 'San Francisco');
+
+-- Insert sample data into orders
+INSERT INTO orders (order_id, customer_id, order_date, total_amount) VALUES
+                                                                         (1, 3, '2025-01-10', 550.75),
+                                                                         (2, 4, '2025-01-12', 520.50),
+                                                                         (3, 5, '2025-01-15', 500.00),
+                                                                         (4, 3, '2025-01-20', 5040.00),
+                                                                         (5, 4, '2025-01-22', 4005.99);
+
+-- Insert sample data into products
+INSERT INTO products (product_id, order_id, product_name, quantity) VALUES
+                                                                        (1, 1, 'Laptop', 1),
+                                                                        (2, 1, 'Mouse', 2),
+                                                                        (3, 2, 'Smartphone', 1),
+                                                                        (4, 2, 'Headphones', 1),
+                                                                        (5, 3, 'Tablet', 3),
+                                                                        (6, 4, 'Keyboard', 1),
+                                                                        (7, 5, 'Monitor', 2);
+
+SELECT
+    customer_id
+FROM
+    orders
+GROUP BY
+    customer_id
+HAVING
+    COUNT(order_id) > 1  -- Change to > 1 instead of > 2
+   AND SUM(total_amount) > 500;
