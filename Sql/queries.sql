@@ -79,3 +79,10 @@ SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS full_name, dep.department_n
         FROM employees AS emp
          LEFT JOIN departments AS dep
 ON emp.department_id = dep.department_id;
+
+-- RIGHT JOIN (RIGHT OUTER JOIN)
+
+SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS full_name, dep.department_name
+        FROM employees AS emp
+        RIGHT JOIN departments AS dep
+ON emp.department_id = dep.department_id;
