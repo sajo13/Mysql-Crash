@@ -276,3 +276,33 @@ VALUES (1, 'Sajo', 'Sunny', '1990-05-15');
 SELECT u.username, u.email, p.first_name, p.last_name, p.date_of_birth
 FROM users u
          JOIN user_profiles p ON u.user_id = p.user_id;
+
+-- One-to-Many Relationship
+
+CREATE TABLE users (
+                       user_id INT AUTO_INCREMENT PRIMARY KEY,
+                       username VARCHAR(50) NOT NULL,
+                       email VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE posts (
+                       post_id INT AUTO_INCREMENT PRIMARY KEY,
+                       user_id INT,
+                       title VARCHAR(255),
+                       content TEXT,
+                       FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- Inserting users
+INSERT INTO users (username, email) VALUES ('alice', 'alice@example.com');
+INSERT INTO users (username, email) VALUES ('bob', 'bob@example.com');
+
+-- Inserting posts
+INSERT INTO posts (user_id, title, content) VALUES (1, 'Post 1 by Alice', 'Content of post 1');
+INSERT INTO posts (user_id, title, content) VALUES (1, 'Post 2 by Alice', 'Content of post 2');
+INSERT INTO posts (user_id, title, content) VALUES (2, 'Post 1 by Bob', 'Content of post 1');
+
+
+SELECT u.username, p.title, p.content
+FROM users u
+         JOIN posts p ON u.user_id = p.user_id;
