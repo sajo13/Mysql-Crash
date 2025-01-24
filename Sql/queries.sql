@@ -306,3 +306,45 @@ INSERT INTO posts (user_id, title, content) VALUES (2, 'Post 1 by Bob', 'Content
 SELECT u.username, p.title, p.content
 FROM users u
          JOIN posts p ON u.user_id = p.user_id;
+
+
+-- Many-to-Many Relationship
+
+CREATE TABLE students (
+                          student_id INT AUTO_INCREMENT PRIMARY KEY,
+                          name VARCHAR(50)
+);
+
+CREATE TABLE courses (
+                         course_id INT AUTO_INCREMENT PRIMARY KEY,
+                         course_name VARCHAR(100)
+);
+
+CREATE TABLE student_courses (
+                                 student_id INT,
+                                 course_id INT,
+                                 PRIMARY KEY (student_id, course_id),
+                                 FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+                                 FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE
+);
+
+
+-- Inserting students
+INSERT INTO students (name) VALUES ('John Doe');
+INSERT INTO students (name) VALUES ('Jane Smith');
+
+-- Inserting courses
+INSERT INTO courses (course_name) VALUES ('Math 101');
+INSERT INTO courses (course_name) VALUES ('History 101');
+
+-- Enroll students in courses
+INSERT INTO student_courses (student_id, course_id) VALUES (1, 1);  -- John Doe in Math 101
+INSERT INTO student_courses (student_id, course_id) VALUES (1, 2);  -- John Doe in History 101
+INSERT INTO student_courses (student_id, course_id) VALUES (2, 1);  -- Jane Smith in Math 101
+
+
+
+SELECT s.name AS student_name, c.course_name
+FROM students s
+         JOIN student_courses sc ON s.student_id = sc.student_id
+         JOIN courses c ON sc.course_id = c.course_id;
