@@ -41,3 +41,11 @@ INSERT INTO employees (first_name, last_name, department_id)
 VALUES ('Arun', 'Thomas', 1); -- Alex is in HR (department_id 1)
 
 
+--Add foreign key after table creation
+
+ALTER TABLE employees
+    ADD CONSTRAINT fk_department
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
