@@ -64,3 +64,12 @@ Schema::create('posts', function (Blueprint $table) {
               ->on('users') // The table that the foreign key references
               ->onDelete('cascade'); // If a user is deleted, delete all their posts
     });
+
+-- Inner Join
+
+SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS full_name, dep.department_name
+    FROM employees AS emp
+    INNER JOIN departments AS dep
+ON emp.department_id = dep.department_id;
+
+
