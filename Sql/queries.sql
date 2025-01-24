@@ -382,3 +382,71 @@ INSERT INTO users (username, email) VALUES ('john_doe', 'john.doe@example.com');
 EXPLAIN SELECT * FROM users WHERE email = 'john.doe@example.com';
 
 CREATE INDEX idx_email ON users(email);
+
+-- ***************************************
+-- Optimization Tips for MySQL Queries
+-- ***************************************
+
+/*
+  1. **Limit the Columns**:
+     - Avoid using SELECT * in your queries.
+     - Instead, only select the columns you actually need.
+     - This reduces the amount of data MySQL needs to retrieve and can drastically improve performance, especially for large tables.
+*/
+
+-- Example: Instead of selecting all columns, select only the columns you need
+SELECT username, email FROM users WHERE email = 'john.doe@example.com';
+
+
+/*
+  2. **Avoid OR in WHERE Clauses**:
+     - Using OR conditions can be inefficient because MySQL has to scan different indexes or tables to satisfy the condition.
+     - Instead of using OR, consider:
+       a) Rewriting the query
+       b) Using UNION to combine the results of multiple queries
+*/
+
+-- Example with OR (not optimal)
+SELECT * FROM users WHERE email = 'john.doe@example.com' OR username = 'johndoe';
+
+-- Optimized version using UNION to avoid OR (faster for large datasets)
+SELECT * FROM users WHERE email = 'john.doe@example.com'
+UNION
+SELECT * FROM users WHERE username = 'johndoe';
+
+
+/*
+  3. **Use EXISTS Instead of IN**:
+     - If you are using a subquery with IN, it may be less efficient because MySQL must evaluate all the values returned by the subquery.
+     - The EXISTS keyword can sometimes be more efficient, especially if the subquery returns many rows.
+     - EXISTS stops as soon as it finds the first match, making it more efficient than IN when dealing with large datasets.
+*/
+
+-- Example with IN (less efficient)
+SELECT * FROM orders o
+WHERE o.user_id IN (
+    SELECT user_id FROM users WHERE email = 'john.doe@example.com'
+);
+
+-- Optimized version using EXISTS (faster for large datasets)
+SELECT * FROM orders o
+WHERE EXISTS (
+    SELECT 1 FROM users u WHERE u.user_id = o.user_id AND u.email = 'john.doe@example.com'
+);
+
+
+/*
+  4. **Avoid DISTINCT if Possible**:
+     - The DISTINCT keyword requires MySQL to sort the result set, which can be expensive.
+     - If you do not absolutely need unique rows, avoid using DISTINCT.
+     - If only filtering on unique values, consider using GROUP BY instead of DISTINCT.
+*/
+
+-- Example with DISTINCT (inefficient if unnecessary)
+SELECT DISTINCT email FROM users;
+
+-- Optimized version without DISTINCT (faster)
+SELECT email FROM users;
+
+-- Alternatively, you can use GROUP BY if you're aggregating results
+SELECT email FROM users GROUP BY email;
