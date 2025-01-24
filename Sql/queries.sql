@@ -473,3 +473,43 @@ CREATE TABLE orders (
 );
 
 SHOW INDEX FROM orders;
+
+-- Fetch the Most Popular Authors
+-- Authors Table: Contains author information
+CREATE TABLE authors (
+                         author_id INT AUTO_INCREMENT PRIMARY KEY,
+                         first_name VARCHAR(100),
+                         last_name VARCHAR(100)
+);
+
+-- Books Table: Contains book information with a foreign key referencing authors table
+CREATE TABLE books (
+                       book_id INT AUTO_INCREMENT PRIMARY KEY,
+                       title VARCHAR(255),
+                       author_id INT,
+                       FOREIGN KEY (author_id) REFERENCES authors(author_id)
+);
+
+
+-- Insert data into authors table
+INSERT INTO authors (first_name, last_name)
+VALUES
+    ('George', 'Orwell'),
+    ('J.K.', 'Rowling'),
+    ('J.R.R.', 'Tolkien');
+
+-- Insert data into books table
+INSERT INTO books (title, author_id)
+VALUES
+    ('1984', 1),
+    ('Animal Farm', 1),
+    ("Harry Potter and the Philosopher\'s Stone", 2),
+('Harry Potter and the Chamber of Secrets', 2),
+('The Hobbit', 3);
+
+
+SELECT a.first_name, a.last_name, COUNT(b.book_id) AS books_written
+FROM authors a
+LEFT JOIN books b ON a.author_id = b.author_id
+GROUP BY a.author_id
+ORDER BY books_written DESC;
