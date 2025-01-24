@@ -112,17 +112,18 @@ CREATE TABLE employees (
             employee_id INT PRIMARY KEY,
             first_name VARCHAR(50),
             last_name VARCHAR(50),
+            salary INT,
             manager_id INT,
             FOREIGN KEY (manager_id) REFERENCES employees(employee_id)
 );
 
 
-INSERT INTO employees (employee_id, first_name, last_name, manager_id) VALUES
-        (1, 'John', 'Doe', NULL),       -- John has no manager (perhaps he's the CEO)
-        (2, 'Jane', 'Smith', 1),       -- Jane's manager is John (employee_id 1)
-        (3, 'Tom', 'Brown', 1),        -- Tom's manager is John (employee_id 1)
-        (4, 'Alice', 'Johnson', 2),    -- Alice's manager is Jane (employee_id 2)
-        (5, 'Bob', 'White', 3);        -- Bob's manager is Tom (employee_id 3)
+INSERT INTO employees (employee_id, first_name, last_name, salary, manager_id) VALUES
+        (1, 'John', 'Doe', 10000,NULL),       -- John has no manager (perhaps he's the CEO)
+        (2, 'Jane', 'Smith', 20000,1),       -- Jane's manager is John (employee_id 1)
+        (3, 'Tom', 'Brown', 20000, 1),        -- Tom's manager is John (employee_id 1)
+        (4, 'Alice', 'Johnson', 20000, 2),    -- Alice's manager is Jane (employee_id 2)
+        (5, 'Bob', 'White', 30000, 3);        -- Bob's manager is Tom (employee_id 3)
 
 SELECT e.first_name AS employee_first_name,
        e.last_name AS employee_last_name,
@@ -130,3 +131,14 @@ SELECT e.first_name AS employee_first_name,
        m.last_name AS manager_last_name
 FROM employees e
          LEFT JOIN employees m ON e.manager_id = m.employee_id;
+
+
+-- Group Results With Aggregate Functions
+
+SELECT employee_id,
+       SUM(salary) AS total_spent,
+       AVG(salary) AS avg_spent,
+       MIN(salary) AS min_spent,
+       MAX(salary) AS max_spent
+       FROM employees
+       GROUP BY employee_id;
