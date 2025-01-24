@@ -367,3 +367,18 @@ INSERT INTO users (username, email) VALUES ('jane_doe', 'john.doe@example.com');
 
 
 SELECT * FROM users;
+
+#Create Index to speedup seach query column
+
+CREATE TABLE users (
+                       user_id INT AUTO_INCREMENT PRIMARY KEY,
+                       username VARCHAR(50) NOT NULL,
+                       email VARCHAR(100) NOT NULL
+);
+
+
+INSERT INTO users (username, email) VALUES ('john_doe', 'john.doe@example.com');
+
+EXPLAIN SELECT * FROM users WHERE email = 'john.doe@example.com';
+
+CREATE INDEX idx_email ON users(email);
