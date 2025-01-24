@@ -49,3 +49,18 @@ ALTER TABLE employees
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
+-- in laravel Foreign key add
+
+Schema::create('posts', function (Blueprint $table) {
+        $table->id(); // Primary key for the posts table
+        $table->string('title');
+        $table->text('content');
+        $table->unsignedBigInteger('user_id'); // Foreign key column for users
+        $table->timestamps();
+
+        // Foreign key constraint
+        $table->foreign('user_id') // 'user_id' is the foreign key
+              ->references('id') // 'id' is the primary key in the 'users' table
+              ->on('users') // The table that the foreign key references
+              ->onDelete('cascade'); // If a user is deleted, delete all their posts
+    });
