@@ -513,3 +513,54 @@ FROM authors a
 LEFT JOIN books b ON a.author_id = b.author_id
 GROUP BY a.author_id
 ORDER BY books_written DESC;
+
+-- ***************************************
+-- 1. Create Movies and Rentals Tables
+-- ***************************************
+
+-- Create movies table
+CREATE TABLE movies (
+                        movie_id INT AUTO_INCREMENT PRIMARY KEY,
+                        title VARCHAR(255),
+                        release_year INT
+);
+
+-- Create rentals table
+CREATE TABLE rentals (
+                         rental_id INT AUTO_INCREMENT PRIMARY KEY,
+                         movie_id INT,
+                         rental_date DATE,
+                         return_date DATE,
+                         FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
+);
+
+-- ***************************************
+-- 2. Insert Sample Data into Movies and Rentals Tables
+-- ***************************************
+
+-- Insert data into movies table
+INSERT INTO movies (title, release_year)
+VALUES
+    ('The Matrix', 1999),
+    ('Inception', 2010),
+    ('The Godfather', 1972);
+
+-- Insert data into rentals table
+INSERT INTO rentals (movie_id, rental_date, return_date)
+VALUES
+    (1, '2025-01-01', '2025-01-02'),
+    (1, '2025-01-02', '2025-01-03'),
+    (2, '2025-01-01', '2025-01-02'),
+    (3, '2025-01-02', '2025-01-03'),
+    (2, '2025-01-03', '2025-01-04');
+
+-- ***************************************
+-- 3. Calculate Average Rentals Per Day
+-- ***************************************
+
+SELECT AVG(daily_rentals) AS avg_rentals_per_day
+FROM (
+         SELECT rental_date, COUNT(*) AS daily_rentals
+         FROM rentals
+         GROUP BY rental_date
+     ) AS daily_counts;
