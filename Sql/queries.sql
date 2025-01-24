@@ -248,3 +248,31 @@ GROUP BY
 HAVING
     COUNT(order_id) > 1  -- Change to > 1 instead of > 2
    AND SUM(total_amount) > 500;
+
+
+-- One-to-One Relationship
+
+CREATE TABLE users (
+                       user_id INT AUTO_INCREMENT PRIMARY KEY,
+                       username VARCHAR(50) NOT NULL,
+                       email VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE user_profiles (
+                               profile_id INT AUTO_INCREMENT PRIMARY KEY,
+                               user_id INT,
+                               first_name VARCHAR(50),
+                               last_name VARCHAR(50),
+                               date_of_birth DATE,
+                               FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO users (username, email) VALUES ('Sajo007', 'sajo@example.com');
+INSERT INTO user_profiles (user_id, first_name, last_name, date_of_birth)
+VALUES (1, 'Sajo', 'Sunny', '1990-05-15');
+
+SELECT u.username, u.email, p.first_name, p.last_name, p.date_of_birth
+FROM users u
+         JOIN user_profiles p ON u.user_id = p.user_id;
